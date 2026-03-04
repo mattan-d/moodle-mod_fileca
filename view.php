@@ -7,9 +7,9 @@
 // (at your option) any later version.
 
 /**
- * Prints a particular instance of fileca
+ * Prints a particular instance of docviewer
  *
- * @package    mod_fileca
+ * @package    mod_docviewer
  * @copyright  2025 CentricApp LTD
  * @author     Dev Team <dev@centricapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -21,38 +21,38 @@ require_once(dirname(__FILE__).'/lib.php');
 $id = optional_param('id', 0, PARAM_INT); // Course module ID.
 
 if ($id) {
-    $cm         = get_coursemodule_from_id('fileca', $id, 0, false, MUST_EXIST);
+    $cm         = get_coursemodule_from_id('docviewer', $id, 0, false, MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-    $fileca     = $DB->get_record('fileca', array('id' => $cm->instance), '*', MUST_EXIST);
+    $docviewer  = $DB->get_record('docviewer', array('id' => $cm->instance), '*', MUST_EXIST);
 } else {
     print_error('missingparameter');
 }
 
 require_login($course, true, $cm);
 $context = context_module::instance($cm->id);
-require_capability('mod/fileca:view', $context);
+require_capability('mod/docviewer:view', $context);
 
 // Completion and log.
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
 
 // Print the page header.
-$PAGE->set_url('/mod/fileca/view.php', array('id' => $cm->id));
-$PAGE->set_title(format_string($fileca->name));
+$PAGE->set_url('/mod/docviewer/view.php', array('id' => $cm->id));
+$PAGE->set_title(format_string($docviewer->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 
 // Get the file.
 $fs = get_file_storage();
-$files = $fs->get_area_files($context->id, 'mod_fileca', 'content', 0, 'sortorder DESC, id ASC', false);
+$files = $fs->get_area_files($context->id, 'mod_docviewer', 'content', 0, 'sortorder DESC, id ASC', false);
 
-debugging('[fileca view] Looking for files in context: ' . $context->id . ', component: mod_fileca, filearea: content, itemid: 0', DEBUG_DEVELOPER);
-debugging('[fileca view] Found ' . count($files) . ' files', DEBUG_DEVELOPER);
+debugging('[docviewer view] Looking for files in context: ' . $context->id . ', component: mod_docviewer, filearea: content, itemid: 0', DEBUG_DEVELOPER);
+debugging('[docviewer view] Found ' . count($files) . ' files', DEBUG_DEVELOPER);
 
 if (empty($files)) {
     echo $OUTPUT->header();
-    echo $OUTPUT->heading(format_string($fileca->name));
-    echo $OUTPUT->box(get_string('nofile', 'fileca'));
+    echo $OUTPUT->heading(format_string($docviewer->name));
+    echo $OUTPUT->box(get_string('nofile', 'docviewer'));
     echo $OUTPUT->footer();
     exit;
 }
@@ -69,96 +69,96 @@ $ispdf = ($extension === 'pdf');
 
 $displayfile = $file; // Start with original file
 if ($extension !== 'pdf' && in_array($extension, array('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'))) {
-    debugging('[fileca view] File needs conversion from ' . $extension . ' to PDF', DEBUG_DEVELOPER);
+    debugging('[docviewer view] File needs conversion from ' . $extension . ' to PDF', DEBUG_DEVELOPER);
     
     // Check if already converted
     $convertedfilename = pathinfo($filename, PATHINFO_FILENAME) . '.pdf';
-    $converted = $fs->get_file($context->id, 'mod_fileca', 'converted', 0, '/', $convertedfilename);
+    $converted = $fs->get_file($context->id, 'mod_docviewer', 'converted', 0, '/', $convertedfilename);
     
     if ($converted && !$converted->is_directory()) {
-        debugging('[fileca view] Found existing converted PDF: ' . $convertedfilename, DEBUG_DEVELOPER);
+        debugging('[docviewer view] Found existing converted PDF: ' . $convertedfilename, DEBUG_DEVELOPER);
         $displayfile = $converted; // Use the converted file object
         $filename = $convertedfilename;
         $filearea = 'converted';
         $ispdf = true;
     } else {
-        debugging('[fileca view] No existing conversion, attempting conversion', DEBUG_DEVELOPER);
+        debugging('[docviewer view] No existing conversion, attempting conversion', DEBUG_DEVELOPER);
         // Attempt conversion
-        $convertedfile = fileca_convert_to_pdf($file, $context);
+        $convertedfile = docviewer_convert_to_pdf($file, $context);
         if ($convertedfile) {
-            debugging('[fileca view] Conversion successful', DEBUG_DEVELOPER);
+            debugging('[docviewer view] Conversion successful', DEBUG_DEVELOPER);
             $displayfile = $convertedfile; // Use the newly converted file object
             $filename = $convertedfile->get_filename();
             $filearea = 'converted';
             $ispdf = true;
         } else {
-            debugging('[fileca view] Conversion failed or in progress, showing original file', DEBUG_DEVELOPER);
+            debugging('[docviewer view] Conversion failed or in progress, showing original file', DEBUG_DEVELOPER);
             // Conversion failed or in progress, show download link instead
             $ispdf = false;
         }
     }
 }
 
-debugging('[fileca view] Final file to display: ' . $filename . ', filearea: ' . $filearea . ', ispdf: ' . ($ispdf ? 'yes' : 'no'), DEBUG_DEVELOPER);
+debugging('[docviewer view] Final file to display: ' . $filename . ', filearea: ' . $filearea . ', ispdf: ' . ($ispdf ? 'yes' : 'no'), DEBUG_DEVELOPER);
 
-error_log('[fileca] About to generate URL for file: ' . $filename . ' in filearea: ' . $filearea);
-error_log('[fileca] Display file path: ' . $displayfile->get_filepath());
-error_log('[fileca] Display file name: ' . $displayfile->get_filename());
+error_log('[docviewer] About to generate URL for file: ' . $filename . ' in filearea: ' . $filearea);
+error_log('[docviewer] Display file path: ' . $displayfile->get_filepath());
+error_log('[docviewer] Display file name: ' . $displayfile->get_filename());
 
 // Output starts here.
 echo $OUTPUT->header();
-echo $OUTPUT->heading(format_string($fileca->name));
+echo $OUTPUT->heading(format_string($docviewer->name));
 
-if (!empty($fileca->intro)) {
-    echo $OUTPUT->box(format_module_intro('fileca', $fileca, $cm->id), 'generalbox mod_introbox', 'filecaintro');
+if (!empty($docviewer->intro)) {
+    echo $OUTPUT->box(format_module_intro('docviewer', $docviewer, $cm->id), 'generalbox mod_introbox', 'docviewerintro');
 }
 
 $fileurl = moodle_url::make_pluginfile_url(
     $context->id,
-    'mod_fileca',
+    'mod_docviewer',
     $filearea,
     0,
     $displayfile->get_filepath(),
     $displayfile->get_filename()
 );
 
-error_log('[fileca] Generated URL: ' . $fileurl->out(false));
+error_log('[docviewer] Generated URL: ' . $fileurl->out(false));
 
-debugging('[fileca view] Generated file URL: ' . $fileurl->out(false), DEBUG_DEVELOPER);
+debugging('[docviewer view] Generated file URL: ' . $fileurl->out(false), DEBUG_DEVELOPER);
 
 if ($ispdf) {
     echo '<div class="pdf-viewer-container">';
     
     // Build protection classes
-    $copyclass = empty($fileca->enablecopying) ? 'no-copy' : '';
+    $copyclass = empty($docviewer->enablecopying) ? 'no-copy' : '';
     // If download is disabled, also disable printing regardless of print setting
-    $printclass = (empty($fileca->enabledownload) || empty($fileca->enableprinting)) ? 'no-print' : '';
+    $printclass = (empty($docviewer->enabledownload) || empty($docviewer->enableprinting)) ? 'no-print' : '';
     $classes = trim($copyclass . ' ' . $printclass);
     
     // Build iframe URL with parameters to hide toolbar buttons when download is disabled
     $iframeurl = $fileurl->out(false);
-    if (empty($fileca->enabledownload)) {
+    if (empty($docviewer->enabledownload)) {
         // Add parameters to hide download/print buttons in PDF viewer
         $iframeurl .= '#toolbar=0&navpanes=0&scrollbar=1';
     }
     
     echo '<div class="pdf-wrapper ' . $classes . '" id="pdf-viewer-wrapper">';
     echo '<!-- PDF URL: ' . $fileurl->out(false) . ' -->';
-    echo '<!-- File component: mod_fileca, area: content -->';
+    echo '<!-- File component: mod_docviewer, area: content -->';
     echo '<iframe src="' . $iframeurl . '" width="100%" height="800px" style="border: 1px solid #ccc;" id="pdf-iframe"></iframe>';
     echo '</div>';
     
     // Download button if enabled
-    if (!empty($fileca->enabledownload)) {
+    if (!empty($docviewer->enabledownload)) {
         echo '<div class="pdf-download" style="margin-top: 10px;">';
-        echo '<a href="'.$fileurl->out(true).'" class="btn btn-primary" download>'.get_string('download', 'fileca').'</a>';
+        echo '<a href="'.$fileurl->out(true).'" class="btn btn-primary" download>'.get_string('download', 'docviewer').'</a>';
         echo '</div>';
     }
     
     // Summarize button if enabled
-    if (!empty($fileca->enablesummarize)) {
-        echo '<div class="fileca-summarize" style="margin-top: 20px;">';
-        echo '<button id="summarize-btn" class="btn btn-secondary">'.get_string('summarize', 'fileca').'</button>';
+    if (!empty($docviewer->enablesummarize)) {
+        echo '<div class="docviewer-summarize" style="margin-top: 20px;">';
+        echo '<button id="summarize-btn" class="btn btn-secondary">'.get_string('summarize', 'docviewer').'</button>';
         echo '<div id="summary-result" style="display:none; margin-top: 20px; padding: 15px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;"></div>';
         echo '</div>';
         
@@ -169,9 +169,9 @@ if ($ispdf) {
             var resultDiv = document.getElementById("summary-result");
             
             btn.disabled = true;
-            btn.textContent = "' . get_string('summarizing', 'fileca') . '...";
+            btn.textContent = "' . get_string('summarizing', 'docviewer') . '...";
             
-            fetch("' . new moodle_url('/mod/fileca/summarize.php') . '", {
+            fetch("' . new moodle_url('/mod/docviewer/summarize.php') . '", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -179,26 +179,26 @@ if ($ispdf) {
                 body: JSON.stringify({
                     sesskey: "' . sesskey() . '",
                     contextid: ' . $context->id . ',
-                    filecaid: ' . $fileca->id . '
+                    docviewerid: ' . $docviewer->id . '
                 })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    resultDiv.innerHTML = "<h4>' . get_string('summary', 'fileca') . '</h4>" + data.summary;
+                    resultDiv.innerHTML = "<h4>' . get_string('summary', 'docviewer') . '</h4>" + data.summary;
                     resultDiv.style.display = "block";
                 } else {
                     resultDiv.innerHTML = "<div class=\"alert alert-danger\">" + data.error + "</div>";
                     resultDiv.style.display = "block";
                 }
                 btn.disabled = false;
-                btn.textContent = "' . get_string('summarize', 'fileca') . '";
+                btn.textContent = "' . get_string('summarize', 'docviewer') . '";
             })
             .catch(error => {
-                resultDiv.innerHTML = "<div class=\"alert alert-danger\">' . get_string('summarizeerror', 'fileca') . '</div>";
+                resultDiv.innerHTML = "<div class=\"alert alert-danger\">' . get_string('summarizeerror', 'docviewer') . '</div>";
                 resultDiv.style.display = "block";
                 btn.disabled = false;
-                btn.textContent = "' . get_string('summarize', 'fileca') . '";
+                btn.textContent = "' . get_string('summarize', 'docviewer') . '";
             });
         });
         </script>';
@@ -209,7 +209,7 @@ if ($ispdf) {
     echo '<style>';
     
     // Copy protection - prevents text selection but keeps buttons clickable
-    if (empty($fileca->enablecopying)) {
+    if (empty($docviewer->enablecopying)) {
         echo '
         .no-copy {
             -webkit-user-select: none;
@@ -231,7 +231,7 @@ if ($ispdf) {
     }
     
     // Print protection
-    if (empty($fileca->enabledownload) || empty($fileca->enableprinting)) {
+    if (empty($docviewer->enabledownload) || empty($docviewer->enableprinting)) {
         echo '
         @media print {
             .no-print,
@@ -243,7 +243,7 @@ if ($ispdf) {
     
     echo '</style>';
     
-    if (empty($fileca->enabledownload)) {
+    if (empty($docviewer->enabledownload)) {
         echo '<script>
         (function() {
             // Prevent keyboard shortcuts for download/save
@@ -279,7 +279,7 @@ if ($ispdf) {
         </script>';
     }
     
-    if (empty($fileca->enablecopying)) {
+    if (empty($docviewer->enablecopying)) {
         echo '<script>
         (function() {
             var pdfWrapper = document.getElementById("pdf-viewer-wrapper");
@@ -308,10 +308,10 @@ if ($ispdf) {
 
 } else {
     // For other file types, just provide download link if enabled.
-    if (!empty($fileca->enabledownload)) {
-        echo '<a href="'.$fileurl->out(true).'" class="btn btn-primary" download>'.get_string('download', 'fileca').'</a>';
+    if (!empty($docviewer->enabledownload)) {
+        echo '<a href="'.$fileurl->out(true).'" class="btn btn-primary" download>'.get_string('download', 'docviewer').'</a>';
     } else {
-        echo $OUTPUT->notification(get_string('downloadnotenabled', 'fileca'), 'info');
+        echo $OUTPUT->notification(get_string('downloadnotenabled', 'docviewer'), 'info');
     }
 }
 

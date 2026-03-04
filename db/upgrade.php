@@ -7,9 +7,9 @@
 // (at your option) any later version.
 
 /**
- * Upgrade code for mod_fileca
+ * Upgrade code for mod_docviewer
  *
- * @package    mod_fileca
+ * @package    mod_docviewer
  * @copyright  2025 CentricApp LTD
  * @author     Dev Team <dev@centricapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -17,14 +17,27 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-function xmldb_fileca_upgrade($oldversion) {
+function xmldb_docviewer_upgrade($oldversion) {
     global $CFG, $DB;
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2025010201) {
-        // Define field enableprinting to be added to fileca.
-        $table = new xmldb_table('fileca');
+    // Migrate from legacy mod_fileca: if table fileca exists, rename to docviewer.
+    if ($oldversion < 2025010202) {
+        $tablefileca = new xmldb_table('fileca');
+        $tabledocviewer = new xmldb_table('docviewer');
+        if ($dbman->table_exists($tablefileca)) {
+            if ($dbman->table_exists($tabledocviewer)) {
+                $dbman->drop_table($tabledocviewer);
+            }
+            $dbman->rename_table($tablefileca, 'docviewer');
+        }
+        upgrade_mod_savepoint(true, 2025010202, 'docviewer');
+    }
+
+    if ($oldversion < 2025010203) {
+        // Define field enableprinting to be added to docviewer.
+        $table = new xmldb_table('docviewer');
         $field = new xmldb_field('enableprinting', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'enablecopying');
 
         // Conditionally launch add field enableprinting.
@@ -32,8 +45,7 @@ function xmldb_fileca_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        // Fileca savepoint reached.
-        upgrade_mod_savepoint(true, 2025010201, 'fileca');
+        upgrade_mod_savepoint(true, 2025010203, 'docviewer');
     }
 
     return true;

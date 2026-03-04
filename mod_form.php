@@ -7,9 +7,9 @@
 // (at your option) any later version.
 
 /**
- * The main fileca configuration form
+ * The main docviewer configuration form
  *
- * @package    mod_fileca
+ * @package    mod_docviewer
  * @copyright  2025 CentricApp LTD
  * @author     Dev Team <dev@centricapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -19,7 +19,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
-class mod_fileca_mod_form extends moodleform_mod {
+class mod_docviewer_mod_form extends moodleform_mod {
 
     function definition() {
         global $CFG;
@@ -47,31 +47,31 @@ class mod_fileca_mod_form extends moodleform_mod {
         $filemanager_options['maxfiles'] = 1;
         $filemanager_options['subdirs'] = 0;
 
-        $mform->addElement('filemanager', 'files', get_string('selectfiles', 'fileca'), null, $filemanager_options);
+        $mform->addElement('filemanager', 'files', get_string('selectfiles', 'docviewer'), null, $filemanager_options);
         $mform->addRule('files', null, 'required', null, 'client');
-        $mform->addHelpButton('files', 'selectfiles', 'fileca');
+        $mform->addHelpButton('files', 'selectfiles', 'docviewer');
 
         // Behaviour section.
-        $mform->addElement('header', 'behaviour', get_string('behaviour', 'fileca'));
+        $mform->addElement('header', 'behaviour', get_string('behaviour', 'docviewer'));
 
         // Enable file download.
-        $mform->addElement('advcheckbox', 'enabledownload', get_string('enabledownload', 'fileca'));
-        $mform->addHelpButton('enabledownload', 'enabledownload', 'fileca');
+        $mform->addElement('advcheckbox', 'enabledownload', get_string('enabledownload', 'docviewer'));
+        $mform->addHelpButton('enabledownload', 'enabledownload', 'docviewer');
         $mform->setDefault('enabledownload', 0);
 
         // Enable printing.
-        $mform->addElement('advcheckbox', 'enableprinting', get_string('enableprinting', 'fileca'));
-        $mform->addHelpButton('enableprinting', 'enableprinting', 'fileca');
+        $mform->addElement('advcheckbox', 'enableprinting', get_string('enableprinting', 'docviewer'));
+        $mform->addHelpButton('enableprinting', 'enableprinting', 'docviewer');
         $mform->setDefault('enableprinting', 1);
 
         // Enable copying.
-        $mform->addElement('advcheckbox', 'enablecopying', get_string('enablecopying', 'fileca'));
-        $mform->addHelpButton('enablecopying', 'enablecopying', 'fileca');
+        $mform->addElement('advcheckbox', 'enablecopying', get_string('enablecopying', 'docviewer'));
+        $mform->addHelpButton('enablecopying', 'enablecopying', 'docviewer');
         $mform->setDefault('enablecopying', 1);
 
         // Enable summarize.
-        $mform->addElement('advcheckbox', 'enablesummarize', get_string('enablesummarize', 'fileca'));
-        $mform->addHelpButton('enablesummarize', 'enablesummarize', 'fileca');
+        $mform->addElement('advcheckbox', 'enablesummarize', get_string('enablesummarize', 'docviewer'));
+        $mform->addHelpButton('enablesummarize', 'enablesummarize', 'docviewer');
         $mform->setDefault('enablesummarize', 1);
 
         $this->standard_coursemodule_elements();
@@ -82,7 +82,7 @@ class mod_fileca_mod_form extends moodleform_mod {
     function data_preprocessing(&$default_values) {
         if ($this->current->instance) {
             $draftitemid = file_get_submitted_draft_itemid('files');
-            file_prepare_draft_area($draftitemid, $this->context->id, 'mod_fileca', 'content', 0,
+            file_prepare_draft_area($draftitemid, $this->context->id, 'mod_docviewer', 'content', 0,
                                     array('subdirs' => 0, 'maxfiles' => 1));
             $default_values['files'] = $draftitemid;
         }

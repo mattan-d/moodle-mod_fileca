@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for mod_fileca
+ * Version information for mod_docviewer
  *
- * @package    mod_fileca
+ * @package    mod_docviewer
  * @copyright  2025 CentricApp LTD
  * @author     Dev Team <dev@centricapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2025010201;        // The current module version (Date: YYYYMMDDXX).
+$plugin->version   = 2025010203;        // The current module version (Date: YYYYMMDDXX).
 $plugin->requires  = 2022041900;        // Requires Moodle 4.0 or later.
-$plugin->component = 'mod_fileca';      // Full name of the plugin (used for diagnostics).
+$plugin->component = 'mod_docviewer';   // Full name of the plugin (used for diagnostics).
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = 'v1.1';

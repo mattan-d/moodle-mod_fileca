@@ -7,9 +7,9 @@
 // (at your option) any later version.
 
 /**
- * List of all fileca instances in course
+ * List of all docviewer instances in course
  *
- * @package    mod_fileca
+ * @package    mod_docviewer
  * @copyright  2025 CentricApp LTD
  * @author     Dev Team <dev@centricapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,15 +25,15 @@ $course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
 require_course_login($course);
 
 $PAGE->set_pagelayout('incourse');
-$PAGE->set_url('/mod/fileca/index.php', array('id' => $id));
+$PAGE->set_url('/mod/docviewer/index.php', array('id' => $id));
 $PAGE->set_title(format_string($course->fullname));
 $PAGE->set_heading(format_string($course->fullname));
-$PAGE->navbar->add(get_string('modulenameplural', 'fileca'));
+$PAGE->navbar->add(get_string('modulenameplural', 'docviewer'));
 
 echo $OUTPUT->header();
 
-if (!$filecas = get_all_instances_in_course('fileca', $course)) {
-    notice(get_string('nofilecas', 'fileca'), new moodle_url('/course/view.php', array('id' => $course->id)));
+if (!$docviewers = get_all_instances_in_course('docviewer', $course)) {
+    notice(get_string('nodocviewers', 'docviewer'), new moodle_url('/course/view.php', array('id' => $course->id)));
 }
 
 $table = new html_table();
@@ -41,16 +41,16 @@ $table->attributes['class'] = 'generaltable mod_index';
 
 $table->head = array(
     get_string('name'),
-    get_string('intro', 'fileca')
+    get_string('intro', 'docviewer')
 );
 
-foreach ($filecas as $fileca) {
+foreach ($docviewers as $docviewer) {
     $link = html_writer::link(
-        new moodle_url('/mod/fileca/view.php', array('id' => $fileca->coursemodule)),
-        format_string($fileca->name)
+        new moodle_url('/mod/docviewer/view.php', array('id' => $docviewer->coursemodule)),
+        format_string($docviewer->name)
     );
 
-    $table->data[] = array($link, format_module_intro('fileca', $fileca, $fileca->coursemodule));
+    $table->data[] = array($link, format_module_intro('docviewer', $docviewer, $docviewer->coursemodule));
 }
 
 echo html_writer::table($table);

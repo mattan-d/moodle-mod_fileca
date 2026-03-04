@@ -7,15 +7,15 @@
 // (at your option) any later version.
 
 /**
- * External API for mod_fileca
+ * External API for mod_docviewer
  *
- * @package    mod_fileca
+ * @package    mod_docviewer
  * @copyright  2025 CentricApp LTD
  * @author     Dev Team <dev@centricapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_fileca;
+namespace mod_docviewer;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -35,7 +35,7 @@ class external extends external_api {
         return new external_function_parameters(
             array(
                 'contextid' => new external_value(PARAM_INT, 'Context ID'),
-                'filecaid' => new external_value(PARAM_INT, 'File CA ID'),
+                'docviewerid' => new external_value(PARAM_INT, 'DocViewer ID'),
                 'content' => new external_value(PARAM_RAW, 'Content to summarize')
             )
         );
@@ -44,23 +44,23 @@ class external extends external_api {
     /**
      * Generate summary of content
      */
-    public static function generate_summary($contextid, $filecaid, $content) {
+    public static function generate_summary($contextid, $docviewerid, $content) {
         global $DB, $USER;
 
         $params = self::validate_parameters(self::generate_summary_parameters(), array(
             'contextid' => $contextid,
-            'filecaid' => $filecaid,
+            'docviewerid' => $docviewerid,
             'content' => $content
         ));
 
         $context = \context::instance_by_id($params['contextid']);
         self::validate_context($context);
-        require_capability('mod/fileca:view', $context);
+        require_capability('mod/docviewer:view', $context);
 
-        // Get the fileca instance
-        $fileca = $DB->get_record('fileca', array('id' => $params['filecaid']), '*', MUST_EXIST);
+        // Get the docviewer instance
+        $docviewer = $DB->get_record('docviewer', array('id' => $params['docviewerid']), '*', MUST_EXIST);
         
-        if (empty($fileca->enablesummarize)) {
+        if (empty($docviewer->enablesummarize)) {
             return array(
                 'success' => false,
                 'summary' => '',

@@ -7,9 +7,9 @@
 // (at your option) any later version.
 
 /**
- * Web service definitions for mod_fileca
+ * Web service definitions for mod_docviewer
  *
- * @package    mod_fileca
+ * @package    mod_docviewer
  * @copyright  2025 CentricApp LTD
  * @author     Dev Team <dev@centricapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -18,14 +18,14 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = array(
-    'mod_fileca_generate_summary' => array(
-        'classname'   => 'mod_fileca\external',
+    'mod_docviewer_generate_summary' => array(
+        'classname'   => 'mod_docviewer\external',
         'methodname'  => 'generate_summary',
         'classpath'   => '',
         'description' => 'Generate summary of file content',
         'type'        => 'read',
         'ajax'        => true,
-        'capabilities' => 'mod/fileca:view',
+        'capabilities' => 'mod/docviewer:view',
         'loginrequired' => true,
     ),
 );

@@ -8,7 +8,7 @@
 /**
  * PDF Viewer with protection features
  *
- * @module     mod_fileca/pdfviewer
+ * @module     mod_docviewer/pdfviewer
  * @copyright  2025 CentricApp LTD
  * @author     Dev Team <dev@centricapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -33,7 +33,7 @@ function pdfviewer(config) {
   var enabledownload = config.enabledownload
   var enablesummarize = config.enablesummarize
   var contextid = config.contextid
-  var filecaid = config.filecaid
+  var docviewerid = config.docviewerid
 
   // Declare variables before using them
   var $ = window.jQuery // Assuming jQuery is available
@@ -148,10 +148,10 @@ function pdfviewer(config) {
     extractPdfText().then((fullText) => {
       var promises = ajax.call([
         {
-          methodname: "mod_fileca_generate_summary",
+          methodname: "mod_docviewer_generate_summary",
           args: {
             contextid: contextid,
-            filecaid: filecaid,
+            docviewerid: docviewerid,
             content: fullText.substring(0, 10000),
           },
         },
@@ -214,4 +214,4 @@ function pdfviewer(config) {
 }
 
 // Example usage:
-// pdfviewer({fileurl: 'path/to/pdf', enablecopying: false, enabledownload: false, enablesummarize: true, contextid: 123, filecaid: 456});
+// pdfviewer({fileurl: 'path/to/pdf', enablecopying: false, enabledownload: false, enablesummarize: true, contextid: 123, docviewerid: 456});

@@ -7,9 +7,9 @@
 // (at your option) any later version.
 
 /**
- * English strings for fileca
+ * English strings for docviewer
  *
- * @package    mod_fileca
+ * @package    mod_docviewer
  * @copyright  2025 CentricApp LTD
  * @author     Dev Team <dev@centricapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -17,13 +17,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'File CA';
-$string['modulenameplural'] = 'File CAs';
-$string['modulename_help'] = 'The File CA module allows teachers to provide a file as a course resource with advanced viewing and security features.';
-$string['fileca:addinstance'] = 'Add a new File CA resource';
-$string['fileca:view'] = 'View File CA content';
-$string['pluginname'] = 'File CA';
-$string['pluginadministration'] = 'File CA administration';
+$string['modulename'] = 'DocViewer';
+$string['modulenameplural'] = 'DocViewers';
+$string['modulename_help'] = 'The DocViewer module allows teachers to provide a file as a course resource with advanced viewing and security features.';
+$string['docviewer:addinstance'] = 'Add a new DocViewer resource';
+$string['docviewer:view'] = 'View DocViewer content';
+$string['pluginname'] = 'DocViewer';
+$string['pluginadministration'] = 'DocViewer administration';
 
 // Form strings.
 $string['selectfiles'] = 'Select file';
@@ -43,9 +43,9 @@ $string['nofile'] = 'No file has been uploaded yet.';
 $string['download'] = 'Download';
 $string['summarize'] = 'Summarize';
 $string['downloadnotenabled'] = 'Downloads are not enabled for this file.';
-$string['nofilecas'] = 'No File CA activities found in this course.';
+$string['nodocviewers'] = 'No DocViewer activities found in this course.';
 $string['intro'] = 'Description';
-$string['page-mod-fileca-x'] = 'Any File CA module page';
+$string['page-mod-docviewer-x'] = 'Any DocViewer module page';
 
 // Summarize strings.
 $string['summarizing'] = 'Generating summary';

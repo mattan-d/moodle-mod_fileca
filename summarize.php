@@ -9,7 +9,7 @@
 /**
  * AJAX endpoint for file summarization
  *
- * @package    mod_fileca
+ * @package    mod_docviewer
  * @copyright  2025 CentricApp LTD
  * @author     Dev Team <dev@centricapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,34 +27,34 @@ $json = file_get_contents('php://input');
 $data = json_decode($json);
 
 $contextid = required_param('contextid', PARAM_INT);
-$filecaid = required_param('filecaid', PARAM_INT);
+$docviewerid = required_param('docviewerid', PARAM_INT);
 
 $context = context::instance_by_id($contextid);
-require_capability('mod/fileca:view', $context);
+require_capability('mod/docviewer:view', $context);
 
-$fileca = $DB->get_record('fileca', array('id' => $filecaid), '*', MUST_EXIST);
+$docviewer = $DB->get_record('docviewer', array('id' => $docviewerid), '*', MUST_EXIST);
 
-if (empty($fileca->enablesummarize)) {
-    echo json_encode(['success' => false, 'error' => get_string('summarizenotenabled', 'fileca')]);
+if (empty($docviewer->enablesummarize)) {
+    echo json_encode(['success' => false, 'error' => get_string('summarizenotenabled', 'docviewer')]);
     exit;
 }
 
 // Get the file content
 $fs = get_file_storage();
-$files = $fs->get_area_files($contextid, 'mod_fileca', 'content', 0, 'sortorder DESC, id ASC', false);
+$files = $fs->get_area_files($contextid, 'mod_docviewer', 'content', 0, 'sortorder DESC, id ASC', false);
 
 if (empty($files)) {
-    echo json_encode(['success' => false, 'error' => get_string('nofile', 'fileca')]);
+    echo json_encode(['success' => false, 'error' => get_string('nofile', 'docviewer')]);
     exit;
 }
 
 $file = reset($files);
 
 // Generate summary
-$summary = fileca_generate_summary($file);
+$summary = docviewer_generate_summary($file);
 
 if ($summary) {
     echo json_encode(['success' => true, 'summary' => $summary]);
 } else {
-    echo json_encode(['success' => false, 'error' => get_string('summarizeerror', 'fileca')]);
+    echo json_encode(['success' => false, 'error' => get_string('summarizeerror', 'docviewer')]);
 }
