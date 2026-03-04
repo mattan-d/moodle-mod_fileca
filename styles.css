@@ -1,0 +1,59 @@
+/* File CA Styles */
+
+.fileca-viewer {
+  margin: 20px 0;
+}
+
+.pdf-viewer-container {
+  border: 1px solid #ddd;
+  padding: 20px;
+  background: #f5f5f5;
+  text-align: center;
+}
+
+#pdf-canvas {
+  max-width: 100%;
+  height: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background: white;
+}
+
+#pdf-controls {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+#pdf-controls button,
+#pdf-controls a {
+  margin: 0 5px;
+  padding: 8px 16px;
+}
+
+#pdf-page-info {
+  display: inline-block;
+  margin: 0 15px;
+  font-weight: bold;
+}
+
+.fileca-summarize {
+  margin-top: 30px;
+  padding: 20px;
+  border-top: 2px solid #ddd;
+}
+
+#summarize-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+#summary-result {
+  margin-top: 20px;
+}
+
+/* Prevent selection when copying is disabled */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
