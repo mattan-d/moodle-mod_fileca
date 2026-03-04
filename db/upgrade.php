@@ -10,7 +10,8 @@
  * Upgrade code for mod_fileca
  *
  * @package    mod_fileca
- * @copyright  2025 Your Name
+ * @copyright  2025 CentricApp LTD
+ * @author     Dev Team <dev@centricapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
